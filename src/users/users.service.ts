@@ -14,4 +14,38 @@ export class UsersService {
 
     return this.repo.save(user);
   }
+
+  findOne(id: number) {
+    const user = this.repo.findOneBy({ id });
+
+    return user;
+  }
+
+  find(email: string) {
+    const user = this.repo.find({ where: { email } });
+
+    return user;
+  }
+
+  async update(id: number, attr: Partial<UserEntity>) {
+    const user = await this.findOne(id);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    Object.assign(user, attr);
+
+    return this.repo.save(user);
+  }
+
+  async remove(id: number) {
+    const user = await this.findOne(id);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return this.repo.remove(user);
+  }
 }
